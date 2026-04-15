@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=1920">
 <title>Epic Performance HQ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,6 @@
     --bg: #0d0d14;
     --card: #15151f;
     --card-border: #2a2a3a;
-    --card-hover: #3a3a5a;
     --subtle: #1a1a2a;
     --text: #e0e0e0;
     --muted: #888;
@@ -27,680 +26,298 @@
     --font-display: 'Orbitron', sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
+  html, body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
     background: var(--bg);
     font-family: var(--font-mono);
     color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
   }
-
   .dashboard {
-    padding: 28px 24px;
-    max-width: 1400px;
-    margin: 0 auto;
+    width: 1920px;
+    height: 1080px;
+    padding: 18px 26px 14px;
+    display: flex;
+    flex-direction: column;
   }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
 
-  /* ── Animations ── */
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-  }
-  @keyframes glow {
-    0%, 100% { filter: drop-shadow(0 0 6px rgba(255,107,53,0.2)); }
-    50% { filter: drop-shadow(0 0 18px rgba(255,107,53,0.45)); }
-  }
-  @keyframes scan {
-    0% { top: 0; }
-    100% { top: 100%; }
-  }
-
-  /* ── Cards ── */
   .card {
     background: var(--card);
     border: 1px solid var(--card-border);
-    border-radius: 16px;
-    padding: 22px;
-    animation: slideUp 0.6s ease backwards;
-    transition: border-color 0.3s;
+    border-radius: 12px;
+    padding: 14px 16px;
     position: relative;
     overflow: hidden;
   }
-  .card:hover { border-color: var(--card-hover); }
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,107,53,0.15), transparent);
-  }
-
   .card-label {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--muted);
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     font-weight: 600;
   }
 
-  /* ── Header ── */
-  .header {
-    text-align: center;
-    margin-bottom: 36px;
-    animation: slideUp 0.3s ease;
-  }
-  .header-sub {
-    font-size: 11px;
-    letter-spacing: 6px;
-    color: var(--orange);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-  .header h1 {
-    font-family: var(--font-display);
-    font-size: clamp(24px, 4vw, 40px);
-    font-weight: 900;
-    letter-spacing: 3px;
-    background: linear-gradient(135deg, var(--orange), var(--pink), var(--green));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: glow 4s ease infinite;
-  }
-  .header-status {
-    font-size: 12px;
-    color: var(--dim);
-    margin-top: 10px;
-  }
-  .header-status .dot {
-    display: inline-block;
-    color: var(--green);
-    margin-right: 6px;
-    animation: pulse 2s infinite;
-  }
+  /* Header */
+  .header { text-align: center; margin-bottom: 16px; flex-shrink: 0; }
+  .header-sub { font-size: 10px; letter-spacing: 6px; color: var(--orange); text-transform: uppercase; margin-bottom: 5px; }
+  .header h1 { font-family: var(--font-display); font-size: 30px; font-weight: 900; letter-spacing: 3px; color: var(--orange); }
+  .header-status { font-size: 11px; color: var(--dim); margin-top: 5px; }
+  .header-status .dot { display:inline-block; color:var(--green); margin-right:6px; animation:pulse 2s infinite; }
 
-  /* ── Grid layouts ── */
-  .grid-4 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  .grid-2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  .grid-2x2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
+  /* Grids */
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:12px; flex-shrink:0; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; flex:1; min-height:0; }
+  .grid-2x3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; }
 
-  /* ── Metric Cards ── */
-  .metric-card { cursor: default; }
-  .metric-card .accent-blob {
-    position: absolute;
-    top: -30px; right: -30px;
-    width: 85px; height: 85px;
-    border-radius: 50%;
-    opacity: 0.07;
-  }
-  .metric-value {
-    font-size: 34px;
-    font-weight: 700;
-    font-family: var(--font-display);
-    line-height: 1;
-  }
-  .metric-unit { font-size: 16px; margin-left: 3px; }
-  .metric-delta {
-    display: inline-block;
-    font-size: 11px;
-    margin-top: 8px;
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
+  /* Metrics */
+  .metric-card .accent-blob { position:absolute; top:-25px; right:-25px; width:70px; height:70px; border-radius:50%; opacity:0.07; }
+  .metric-value { font-size:28px; font-weight:700; font-family:var(--font-display); line-height:1; }
+  .metric-unit { font-size:13px; margin-left:2px; }
+  .metric-delta { display:inline-block; font-size:10px; margin-top:5px; padding:2px 8px; border-radius:16px; }
 
-  /* ── Vibe Gauge ── */
-  .vibe-center { text-align: center; }
-  .vibe-label {
-    font-size: 28px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    margin-top: -6px;
-  }
-  .vibe-sublabel {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-  .vibe-times {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 16px;
-    flex-wrap: wrap;
-  }
-  .vibe-time {
-    font-size: 10px;
-    padding: 3px 7px;
-    border-radius: 6px;
-    background: var(--subtle);
-    color: var(--dim);
-    border: 1px solid transparent;
-    transition: all 0.3s;
-  }
-  .vibe-time.active {
-    background: rgba(255,107,53,0.12);
-    color: var(--orange);
-    border-color: rgba(255,107,53,0.25);
-  }
+  /* Vibe */
+  .vibe-center { text-align:center; }
+  .vibe-label { font-size:20px; font-weight:900; letter-spacing:2px; margin-top:-4px; }
+  .vibe-sublabel { font-size:9px; color:var(--muted); margin-top:2px; }
+  .vibe-times { display:flex; justify-content:center; gap:4px; margin-top:8px; flex-wrap:wrap; }
+  .vibe-time { font-size:9px; padding:2px 5px; border-radius:4px; background:var(--subtle); color:var(--dim); border:1px solid transparent; transition:all 0.3s; }
+  .vibe-time.active { background:rgba(255,107,53,0.12); color:var(--orange); border-color:rgba(255,107,53,0.25); }
 
-  /* ── Weekly Chart ── */
-  .chart-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-  .chart-day { text-align: center; flex: 1; }
-  .chart-bars {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    height: 85px;
-    justify-content: flex-end;
-  }
-  .chart-bar {
-    width: 16px;
-    border-radius: 4px 4px 0 0;
-    transition: height 0.8s ease;
-  }
-  .chart-day-label { font-size: 10px; color: var(--dim); margin-top: 6px; }
-  .chart-coffee { font-size: 9px; color: var(--gold); }
-  .chart-legend {
-    display: flex;
-    gap: 18px;
-    margin-top: 16px;
-    justify-content: center;
-  }
-  .chart-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 10px;
-    color: var(--muted);
-  }
-  .chart-legend-dot {
-    width: 8px; height: 8px;
-    border-radius: 3px;
-  }
+  /* Chart */
+  .chart-row { display:flex; justify-content:space-between; align-items:flex-end; }
+  .chart-day { text-align:center; flex:1; }
+  .chart-bars { display:flex; flex-direction:column; align-items:center; gap:1px; height:65px; justify-content:flex-end; }
+  .chart-bar { width:13px; border-radius:3px 3px 0 0; }
+  .chart-day-label { font-size:9px; color:var(--dim); margin-top:4px; }
+  .chart-coffee { font-size:8px; color:var(--gold); }
+  .chart-legend { display:flex; gap:14px; margin-top:8px; justify-content:center; }
+  .chart-legend-item { display:flex; align-items:center; gap:4px; font-size:9px; color:var(--muted); }
+  .chart-legend-dot { width:7px; height:7px; border-radius:2px; }
 
-  /* ── OEE ── */
-  .oee-shift {
-    padding: 12px 14px;
-    background: var(--subtle);
-    border-radius: 10px;
-    border: 1px solid var(--card-border);
-    margin-bottom: 10px;
-  }
-  .oee-shift:last-child { margin-bottom: 0; }
-  .oee-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  .oee-shift-name { font-size: 12px; font-weight: 600; }
-  .oee-score {
-    font-size: 20px;
-    font-weight: 900;
-    font-family: var(--font-display);
-  }
-  .oee-bar-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 5px;
-  }
-  .oee-bar-label { font-size: 9px; color: #666; width: 32px; }
-  .oee-bar-track {
-    flex: 1; height: 7px;
-    background: var(--card-border);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .oee-bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 1.2s ease;
-  }
-  .oee-bar-val { font-size: 9px; color: var(--muted); width: 30px; text-align: right; }
-  .oee-footnote {
-    font-size: 9px;
-    color: var(--faint);
-    text-align: center;
-    margin-top: 12px;
-  }
+  /* OEE */
+  .oee-shift { padding:9px 11px; background:var(--subtle); border-radius:8px; border:1px solid var(--card-border); margin-bottom:7px; }
+  .oee-shift:last-child { margin-bottom:0; }
+  .oee-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+  .oee-shift-name { font-size:11px; font-weight:600; }
+  .oee-score { font-size:15px; font-weight:900; font-family:var(--font-display); }
+  .oee-bar-row { display:flex; align-items:center; gap:6px; margin-bottom:2px; }
+  .oee-bar-label { font-size:8px; color:#666; width:28px; }
+  .oee-bar-track { flex:1; height:5px; background:var(--card-border); border-radius:3px; overflow:hidden; }
+  .oee-bar-fill { height:100%; border-radius:3px; }
+  .oee-bar-val { font-size:8px; color:var(--muted); width:26px; text-align:right; }
+  .oee-footnote { font-size:8px; color:var(--faint); text-align:center; margin-top:7px; }
 
-  /* ── Secondary Stats ── */
-  .stat-tile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 13px;
-    background: var(--subtle);
-    border-radius: 10px;
-    border: 1px solid var(--card-border);
-    transition: transform 0.2s;
-  }
-  .stat-tile:hover { transform: scale(1.03); }
-  .stat-icon {
-    font-size: 24px;
-    animation: float 3s ease infinite;
-  }
-  .stat-number {
-    font-size: 20px;
-    font-weight: 700;
-    font-family: var(--font-display);
-  }
-  .stat-label {
-    font-size: 9px;
-    color: #666;
-    line-height: 1.35;
-  }
+  /* Stats */
+  .stat-tile { display:flex; align-items:center; gap:8px; padding:7px 9px; background:var(--subtle); border-radius:8px; border:1px solid var(--card-border); }
+  .stat-icon { font-size:18px; animation:float 3s ease infinite; }
+  .stat-number { font-size:15px; font-weight:700; font-family:var(--font-display); }
+  .stat-label { font-size:8px; color:#666; line-height:1.3; }
 
-  /* ── Changelog ── */
-  .log-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 10px;
-  }
-  .log-entry {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    padding: 11px 13px;
-    background: var(--subtle);
-    border-radius: 10px;
-    border-left: 3px solid;
-  }
-  .log-time {
-    font-size: 10px;
-    color: var(--dim);
-    min-width: 62px;
-    padding-top: 2px;
-  }
-  .log-tag {
-    font-size: 9px;
-    padding: 2px 7px;
-    border-radius: 4px;
-    margin-right: 6px;
-    text-transform: uppercase;
-    font-weight: 600;
-    display: inline-block;
-  }
-  .log-msg { font-size: 12px; line-height: 1.55; }
+  /* Log */
+  .log-list { display:flex; flex-direction:column; gap:5px; }
+  .log-entry { display:flex; gap:10px; align-items:flex-start; padding:7px 10px; background:var(--subtle); border-radius:8px; border-left:3px solid; }
+  .log-time { font-size:9px; color:var(--dim); min-width:55px; padding-top:1px; }
+  .log-tag { font-size:8px; padding:1px 5px; border-radius:3px; margin-right:5px; text-transform:uppercase; font-weight:600; display:inline-block; }
+  .log-msg { font-size:10px; line-height:1.4; }
 
-  /* ── Footer ── */
-  .footer {
-    text-align: center;
-    margin-top: 36px;
-    font-size: 10px;
-    color: var(--ghost);
-    border-top: 1px solid var(--subtle);
-    padding-top: 18px;
-  }
+  /* Footer */
+  .footer { text-align:center; font-size:9px; color:var(--ghost); border-top:1px solid var(--subtle); padding-top:8px; margin-top:8px; flex-shrink:0; }
 
-  /* ── Scanline overlay for extra plant-floor CRT feel ── */
-  .scanline {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(180deg, transparent, rgba(0,229,160,0.04), transparent);
-    animation: scan 8s linear infinite;
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  /* ── Clock ── */
-  .clock {
-    position: fixed;
-    top: 16px; right: 20px;
-    font-family: var(--font-display);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--orange);
-    letter-spacing: 2px;
-    z-index: 100;
-    opacity: 0.7;
-  }
-  .clock-date {
-    font-size: 9px;
-    color: var(--dim);
-    text-align: right;
-    letter-spacing: 1px;
-    margin-top: 2px;
-    font-family: var(--font-mono);
-    font-weight: 400;
-  }
+  /* Clock */
+  .clock { position:absolute; top:12px; right:22px; font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--orange); letter-spacing:2px; opacity:0.8; }
+  .clock-date { font-size:9px; color:var(--dim); text-align:right; letter-spacing:1px; margin-top:1px; font-family:var(--font-mono); font-weight:400; }
 </style>
 </head>
 <body>
 
-<div class="scanline"></div>
 <div class="clock" id="clock"></div>
 
 <div class="dashboard">
 
-  <!-- Header -->
   <div class="header">
     <div class="header-sub">Plant Operations Command Center</div>
     <h1>EPIC PERFORMANCE HQ</h1>
-    <div class="header-status">
-      <span class="dot">●</span>
-      Lines running · Air compressor: probably on · Breakroom donuts: critical low
-    </div>
+    <div class="header-status"><span class="dot">●</span>Lines running · Air compressor: probably on · Breakroom donuts: critical low</div>
   </div>
 
-  <!-- Top Metrics -->
   <div class="grid-4" id="metrics-grid"></div>
 
-  <!-- Middle Row -->
-  <div class="grid-2">
-    <!-- Vibe Gauge -->
-    <div class="card" style="animation-delay:0.5s">
-      <div class="card-label">Real-Time Plant Floor Vibe Check</div>
-      <div class="vibe-center">
-        <svg id="vibe-svg" viewBox="0 0 200 120" width="210" height="125">
-          <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#2a2a3a" stroke-width="14" stroke-linecap="round"/>
-          <path id="vibe-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#00E5A0" stroke-width="14" stroke-linecap="round" stroke-dasharray="0 251.2"/>
-          <line id="vibe-needle" x1="100" y1="100" x2="100" y2="45" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="100" cy="100" r="5" fill="#fff"/>
-        </svg>
-        <div id="vibe-label" class="vibe-label" style="color:var(--green)">DIALED IN</div>
-        <div class="vibe-sublabel">Plant Floor Vibe Status</div>
-      </div>
-      <div class="vibe-times" id="vibe-times"></div>
-    </div>
+  <div class="grid-3">
 
-    <!-- Weekly Chaos -->
-    <div class="card" style="animation-delay:0.6s">
-      <div class="card-label">Weekly Chaos Report</div>
-      <div class="chart-row" id="chart-row"></div>
-      <div class="chart-legend">
-        <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--green)"></div>Uptime (hrs)</div>
-        <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--pink)"></div>Incidents</div>
-        <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--gold)"></div>Coffee</div>
+    <!-- Col 1: Vibe + OEE -->
+    <div style="display:flex;flex-direction:column;gap:12px;min-height:0">
+      <div class="card" style="flex:0 0 auto">
+        <div class="card-label">Real-Time Plant Floor Vibe Check</div>
+        <div class="vibe-center">
+          <svg viewBox="0 0 200 120" width="175" height="105">
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#2a2a3a" stroke-width="14" stroke-linecap="round"/>
+            <path id="vibe-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#00E5A0" stroke-width="14" stroke-linecap="round" stroke-dasharray="0 251.2"/>
+            <line id="vibe-needle" x1="100" y1="100" x2="100" y2="45" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="100" cy="100" r="5" fill="#fff"/>
+          </svg>
+          <div id="vibe-label" class="vibe-label" style="color:var(--green)">DIALED IN</div>
+          <div class="vibe-sublabel">Plant Floor Vibe Status</div>
+        </div>
+        <div class="vibe-times" id="vibe-times"></div>
+      </div>
+      <div class="card" style="flex:1;min-height:0">
+        <div class="card-label">OEE by Shift (Overall Equipment Epicness)</div>
+        <div id="oee-container"></div>
+        <div class="oee-footnote">* 3rd shift numbers are "aspirational"</div>
       </div>
     </div>
-  </div>
 
-  <!-- OEE + KPIs -->
-  <div class="grid-2">
-    <div class="card" style="animation-delay:0.65s">
-      <div class="card-label">OEE by Shift (Overall Equipment Epicness)</div>
-      <div id="oee-container"></div>
-      <div class="oee-footnote">* 3rd shift numbers are "aspirational"</div>
+    <!-- Col 2: Weekly + KPIs -->
+    <div style="display:flex;flex-direction:column;gap:12px;min-height:0">
+      <div class="card" style="flex:0 0 auto">
+        <div class="card-label">Weekly Chaos Report</div>
+        <div class="chart-row" id="chart-row"></div>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--green)"></div>Uptime (hrs)</div>
+          <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--pink)"></div>Incidents</div>
+          <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--gold)"></div>Coffee</div>
+        </div>
+      </div>
+      <div class="card" style="flex:1;min-height:0">
+        <div class="card-label">Critical KPIs (Key Pastry Indicators)</div>
+        <div class="grid-2x3" id="kpi-grid"></div>
+      </div>
     </div>
-    <div class="card" style="animation-delay:0.7s">
-      <div class="card-label">Critical KPIs (Key Pastry Indicators)</div>
-      <div class="grid-2x2" id="kpi-grid"></div>
+
+    <!-- Col 3: Log -->
+    <div class="card" style="display:flex;flex-direction:column;min-height:0">
+      <div class="card-label">Maintenance Log (Unfiltered)</div>
+      <div class="log-list" id="log-list" style="flex:1;min-height:0;overflow:hidden"></div>
     </div>
+
   </div>
 
-  <!-- Maintenance Log -->
-  <div class="card" style="animation-delay:0.8s">
-    <div class="card-label">Maintenance Log (Unfiltered)</div>
-    <div class="log-grid" id="log-grid"></div>
-  </div>
-
-  <div class="footer">
-    EPIC PERFORMANCE HQ v4.20 · Powered by WD-40 and stubbornness · © 2026 Department of Making Things Go
-  </div>
+  <div class="footer">EPIC PERFORMANCE HQ v4.20 · Powered by WD-40 and stubbornness · © 2026 Department of Making Things Go</div>
 </div>
 
 <script>
-// ── Data ──
-const METRICS = [
+var METRICS = [
   { label: "Plant Awesomeness", value: 97.3, unit: "%", delta: "+2.1% since last audit", color: "#FF6B35" },
   { label: "Cool Problems Solved", value: 842, unit: "", delta: "+18 this week", color: "#00E5A0" },
   { label: "Weird Breakdowns Fixed", value: 613, unit: "", delta: "with zip ties & prayer", color: "#FF3CAC" },
   { label: "WD-40 : Duct Tape Ratio", value: 1.69, unit: "cans/rolls", delta: "perfectly balanced", color: "#FFC300" },
 ];
-
-const SECONDARY = [
+var SECONDARY = [
   { label: "Safety Meetings Survived", value: 487, icon: "🦺" },
-  { label: "Times 'It's Always Done That' Was Wrong", value: 312, icon: "🤡" },
+  { label: "'It's Always Done That' Was Wrong", value: 312, icon: "🤡" },
   { label: "Mystery Noises Investigated", value: 1041, icon: "👂" },
-  { label: "Forklift Near-Misses Witnessed", value: 74, icon: "😱" },
+  { label: "Forklift Near-Misses", value: 74, icon: "😱" },
   { label: "'Temporary' Fixes Still Running", value: 156, icon: "🩹" },
-  { label: "Donuts Consumed in Breakroom", value: 3847, icon: "🍩" },
+  { label: "Breakroom Donuts Consumed", value: 3847, icon: "🍩" },
 ];
-
-const ACTIVITY = [
-  { day: "Mon", uptime: 22, incidents: 3, coffee: 7 },
-  { day: "Tue", uptime: 24, incidents: 1, coffee: 5 },
-  { day: "Wed", uptime: 18, incidents: 6, coffee: 9 },
-  { day: "Thu", uptime: 23, incidents: 2, coffee: 4 },
-  { day: "Fri", uptime: 24, incidents: 0, coffee: 3 },
-  { day: "Sat", uptime: 20, incidents: 4, coffee: 8 },
-  { day: "Sun", uptime: 12, incidents: 0, coffee: 2 },
+var ACTIVITY = [
+  { day:"Mon", uptime:22, incidents:3, coffee:7 },
+  { day:"Tue", uptime:24, incidents:1, coffee:5 },
+  { day:"Wed", uptime:18, incidents:6, coffee:9 },
+  { day:"Thu", uptime:23, incidents:2, coffee:4 },
+  { day:"Fri", uptime:24, incidents:0, coffee:3 },
+  { day:"Sat", uptime:20, incidents:4, coffee:8 },
+  { day:"Sun", uptime:12, incidents:0, coffee:2 },
 ];
-
-const VIBES = [
-  { time: "6 AM", vibe: 25 },
-  { time: "7 AM", vibe: 50 },
-  { time: "8 AM", vibe: 75 },
-  { time: "9 AM", vibe: 85 },
-  { time: "10 AM", vibe: 90 },
-  { time: "11 AM", vibe: 60 },
-  { time: "12 PM", vibe: 35 },
-  { time: "1 PM", vibe: 70 },
-  { time: "2 PM", vibe: 80 },
-  { time: "3 PM", vibe: 55 },
+var VIBES = [
+  {time:"6 AM",vibe:25},{time:"7 AM",vibe:50},{time:"8 AM",vibe:75},
+  {time:"9 AM",vibe:85},{time:"10 AM",vibe:90},{time:"11 AM",vibe:60},
+  {time:"12 PM",vibe:35},{time:"1 PM",vibe:70},{time:"2 PM",vibe:80},{time:"3 PM",vibe:55},
 ];
-
-const OEE_DATA = [
-  { shift: "1st", availability: 91, performance: 88, quality: 97 },
-  { shift: "2nd", availability: 85, performance: 82, quality: 95 },
-  { shift: "3rd", availability: 78, performance: 74, quality: 93 },
+var OEE_DATA = [
+  {shift:"1st",availability:91,performance:88,quality:97},
+  {shift:"2nd",availability:85,performance:82,quality:95},
+  {shift:"3rd",availability:78,performance:74,quality:93},
 ];
-
-const CHANGELOG = [
-  { time: "12m ago", msg: "Line 3 went down. Fixed it by turning it off and on again. Classic.", type: "fix" },
-  { time: "45m ago", msg: "Found the source of the rattle. It was Dave's lunch box on the conveyor.", type: "mystery" },
-  { time: "1h ago", msg: "Operator says machine 'sounds funny.' It's been making that noise since 2019.", type: "ignore" },
-  { time: "2h ago", msg: "Corporate wants another root cause analysis. Root cause: it's old.", type: "paperwork" },
-  { time: "3h ago", msg: "Replaced bearing. Dropped one bolt inside housing. Spent 40 min with a magnet.", type: "fix" },
-  { time: "Yesterday", msg: "Night shift left the compressor running all weekend. Again.", type: "oops" },
+var CHANGELOG = [
+  {time:"12m ago",msg:"Line 3 went down. Fixed it by turning it off and on again. Classic.",type:"fix"},
+  {time:"45m ago",msg:"Found the source of the rattle. It was Dave's lunch box on the conveyor.",type:"mystery"},
+  {time:"1h ago",msg:"Operator says machine 'sounds funny.' It's making that noise since 2019.",type:"ignore"},
+  {time:"2h ago",msg:"Corporate wants another root cause analysis. Root cause: it's old.",type:"paperwork"},
+  {time:"3h ago",msg:"Replaced bearing. Dropped bolt inside housing. 40 min with a magnet.",type:"fix"},
+  {time:"Yesterday",msg:"Night shift left the compressor running all weekend. Again.",type:"oops"},
 ];
+var TYPE_COLORS = {fix:"#00E5A0",mystery:"#8B5CF6",ignore:"#FFC300",paperwork:"#FF6B35",oops:"#FF3CAC"};
 
-const TYPE_COLORS = { fix: "#00E5A0", mystery: "#8B5CF6", ignore: "#FFC300", paperwork: "#FF6B35", oops: "#FF3CAC" };
-
-// ── Animated number counter ──
-function animateNumber(el, target, duration = 1200) {
-  const isFloat = target % 1 !== 0;
-  let start = 0;
-  const step = target / (duration / 16);
-  const id = setInterval(() => {
-    start += step;
-    if (start >= target) {
-      el.textContent = isFloat ? target.toFixed(2) : target;
-      clearInterval(id);
-    } else {
-      el.textContent = isFloat ? start.toFixed(2) : Math.floor(start);
-    }
-  }, 16);
+function animateNumber(el,target,duration){
+  duration=duration||1200;var isFloat=target%1!==0;var cur=0;var step=target/(duration/16);
+  var id=setInterval(function(){cur+=step;if(cur>=target){el.textContent=isFloat?target.toFixed(2):target;clearInterval(id);}
+  else{el.textContent=isFloat?cur.toFixed(2):Math.floor(cur);}},16);
 }
 
-// ── Build Top Metrics ──
-const metricsGrid = document.getElementById('metrics-grid');
-METRICS.forEach((m, i) => {
-  const card = document.createElement('div');
-  card.className = 'card metric-card';
-  card.style.animationDelay = `${i * 0.1}s`;
-  card.innerHTML = `
-    <div class="accent-blob" style="background:${m.color}"></div>
-    <div class="card-label">${m.label}</div>
-    <div class="metric-value" style="color:${m.color}">
-      <span class="num" data-target="${m.value}">0</span>${m.unit ? `<span class="metric-unit">${m.unit}</span>` : ''}
-    </div>
-    <div class="metric-delta" style="background:${m.color}15;color:${m.color}">${m.delta}</div>
-  `;
-  metricsGrid.appendChild(card);
+// Metrics
+var mg=document.getElementById('metrics-grid');
+METRICS.forEach(function(m){
+  var d=document.createElement('div');d.className='card metric-card';
+  d.innerHTML='<div class="accent-blob" style="background:'+m.color+'"></div><div class="card-label">'+m.label+'</div><div class="metric-value" style="color:'+m.color+'"><span class="num" data-target="'+m.value+'">0</span>'+(m.unit?'<span class="metric-unit">'+m.unit+'</span>':'')+'</div><div class="metric-delta" style="background:'+m.color+'15;color:'+m.color+'">'+m.delta+'</div>';
+  mg.appendChild(d);
 });
+setTimeout(function(){document.querySelectorAll('.num').forEach(function(el){animateNumber(el,parseFloat(el.dataset.target));});},300);
 
-// Animate all numbers after short delay
-setTimeout(() => {
-  document.querySelectorAll('.num').forEach(el => {
-    animateNumber(el, parseFloat(el.dataset.target));
-  });
-}, 400);
-
-// ── Build Vibe Gauge ──
-let vibeIdx = 4;
-const vibeArc = document.getElementById('vibe-arc');
-const vibeNeedle = document.getElementById('vibe-needle');
-const vibeLabel = document.getElementById('vibe-label');
-const vibeTimes = document.getElementById('vibe-times');
-
-VIBES.forEach((v, i) => {
-  const span = document.createElement('span');
-  span.className = 'vibe-time';
-  span.textContent = v.time;
-  span.dataset.index = i;
-  vibeTimes.appendChild(span);
-});
-
-function updateVibe() {
-  const v = VIBES[vibeIdx].vibe;
-  const angle = (v / 100) * 180 - 90;
-  const rad = (angle * Math.PI) / 180;
-  const color = v > 80 ? '#00E5A0' : v > 60 ? '#FFC300' : v > 40 ? '#FF6B35' : '#FF3CAC';
-  const label = v > 80 ? 'DIALED IN' : v > 60 ? 'Humming Along' : v > 40 ? 'Meh' : 'Send Maintenance';
-
-  vibeArc.setAttribute('stroke', color);
-  vibeArc.setAttribute('stroke-dasharray', `${(v / 100) * 251.2} 251.2`);
-  vibeArc.style.filter = `drop-shadow(0 0 8px ${color}80)`;
-  vibeNeedle.setAttribute('x2', 100 + 55 * Math.cos(rad));
-  vibeNeedle.setAttribute('y2', 100 - 55 * Math.sin(rad));
-  vibeLabel.textContent = label;
-  vibeLabel.style.color = color;
-
-  document.querySelectorAll('.vibe-time').forEach((el, i) => {
-    el.classList.toggle('active', i === vibeIdx);
-  });
+// Vibe
+var vibeIdx=4,vibeArc=document.getElementById('vibe-arc'),vibeNeedle=document.getElementById('vibe-needle'),vibeLabel=document.getElementById('vibe-label'),vibeTimes=document.getElementById('vibe-times');
+VIBES.forEach(function(v){var s=document.createElement('span');s.className='vibe-time';s.textContent=v.time;vibeTimes.appendChild(s);});
+function updateVibe(){
+  var v=VIBES[vibeIdx].vibe,angle=(v/100)*180-90,rad=angle*Math.PI/180;
+  var color=v>80?'#00E5A0':v>60?'#FFC300':v>40?'#FF6B35':'#FF3CAC';
+  var label=v>80?'DIALED IN':v>60?'Humming Along':v>40?'Meh':'Send Maintenance';
+  vibeArc.setAttribute('stroke',color);vibeArc.setAttribute('stroke-dasharray',(v/100)*251.2+' 251.2');
+  vibeNeedle.setAttribute('x2',100+55*Math.cos(rad));vibeNeedle.setAttribute('y2',100-55*Math.sin(rad));
+  vibeLabel.textContent=label;vibeLabel.style.color=color;
+  document.querySelectorAll('.vibe-time').forEach(function(el,i){i===vibeIdx?el.classList.add('active'):el.classList.remove('active');});
 }
-updateVibe();
-setInterval(() => { vibeIdx = (vibeIdx + 1) % VIBES.length; updateVibe(); }, 3000);
+updateVibe();setInterval(function(){vibeIdx=(vibeIdx+1)%VIBES.length;updateVibe();},3000);
 
-// ── Build Weekly Chart ──
-const chartRow = document.getElementById('chart-row');
-ACTIVITY.forEach(d => {
-  const col = document.createElement('div');
-  col.className = 'chart-day';
-  col.innerHTML = `
-    <div class="chart-bars">
-      <div class="chart-bar" style="background:var(--green);height:${(d.uptime/24)*100}%;opacity:0.8" title="${d.uptime}h uptime"></div>
-      <div class="chart-bar" style="background:var(--pink);height:${(d.incidents/7)*50}%;opacity:0.8;margin-top:-2px" title="${d.incidents} incidents"></div>
-    </div>
-    <div class="chart-day-label">${d.day}</div>
-    <div class="chart-coffee">☕${d.coffee}</div>
-  `;
-  chartRow.appendChild(col);
+// Chart
+var cr=document.getElementById('chart-row');
+ACTIVITY.forEach(function(d){
+  var c=document.createElement('div');c.className='chart-day';
+  c.innerHTML='<div class="chart-bars"><div class="chart-bar" style="background:var(--green);height:'+(d.uptime/24)*100+'%;opacity:0.8"></div><div class="chart-bar" style="background:var(--pink);height:'+(d.incidents/7)*50+'%;opacity:0.8;margin-top:-2px"></div></div><div class="chart-day-label">'+d.day+'</div><div class="chart-coffee">☕'+d.coffee+'</div>';
+  cr.appendChild(c);
 });
 
-// ── Build OEE ──
-const oeeContainer = document.getElementById('oee-container');
-OEE_DATA.forEach(s => {
-  const oee = Math.round((s.availability/100) * (s.performance/100) * (s.quality/100) * 100);
-  const oeeColor = oee > 80 ? '#00E5A0' : oee > 65 ? '#FFC300' : '#FF3CAC';
-  const bars = [
-    { label: 'Avail', val: s.availability, col: '#00E5A0' },
-    { label: 'Perf', val: s.performance, col: '#FFC300' },
-    { label: 'Qual', val: s.quality, col: '#8B5CF6' },
-  ].map(b => `
-    <div class="oee-bar-row">
-      <span class="oee-bar-label">${b.label}</span>
-      <div class="oee-bar-track"><div class="oee-bar-fill" style="width:${b.val}%;background:${b.col}"></div></div>
-      <span class="oee-bar-val">${b.val}%</span>
-    </div>
-  `).join('');
-
-  const div = document.createElement('div');
-  div.className = 'oee-shift';
-  div.innerHTML = `
-    <div class="oee-header">
-      <span class="oee-shift-name">${s.shift} Shift</span>
-      <span class="oee-score" style="color:${oeeColor}">${oee}%</span>
-    </div>
-    ${bars}
-  `;
-  oeeContainer.appendChild(div);
+// OEE
+var oc=document.getElementById('oee-container');
+OEE_DATA.forEach(function(s){
+  var oee=Math.round((s.availability/100)*(s.performance/100)*(s.quality/100)*100);
+  var oeeColor=oee>80?'#00E5A0':oee>65?'#FFC300':'#FF3CAC';
+  var bars=[{l:'Avail',v:s.availability,c:'#00E5A0'},{l:'Perf',v:s.performance,c:'#FFC300'},{l:'Qual',v:s.quality,c:'#8B5CF6'}];
+  var bh=bars.map(function(b){return'<div class="oee-bar-row"><span class="oee-bar-label">'+b.l+'</span><div class="oee-bar-track"><div class="oee-bar-fill" style="width:'+b.v+'%;background:'+b.c+'"></div></div><span class="oee-bar-val">'+b.v+'%</span></div>';}).join('');
+  var d=document.createElement('div');d.className='oee-shift';
+  d.innerHTML='<div class="oee-header"><span class="oee-shift-name">'+s.shift+' Shift</span><span class="oee-score" style="color:'+oeeColor+'">'+oee+'%</span></div>'+bh;
+  oc.appendChild(d);
 });
 
-// ── Build KPIs ──
-const kpiGrid = document.getElementById('kpi-grid');
-SECONDARY.forEach((s, i) => {
-  const tile = document.createElement('div');
-  tile.className = 'stat-tile';
-  tile.innerHTML = `
-    <span class="stat-icon" style="animation-delay:${i*0.3}s">${s.icon}</span>
-    <div>
-      <div class="stat-number"><span class="num2" data-target="${s.value}">0</span></div>
-      <div class="stat-label">${s.label}</div>
-    </div>
-  `;
-  kpiGrid.appendChild(tile);
+// KPIs
+var kg=document.getElementById('kpi-grid');
+SECONDARY.forEach(function(s,i){
+  var t=document.createElement('div');t.className='stat-tile';
+  t.innerHTML='<span class="stat-icon" style="animation-delay:'+i*0.4+'s">'+s.icon+'</span><div><div class="stat-number"><span class="num2" data-target="'+s.value+'">0</span></div><div class="stat-label">'+s.label+'</div></div>';
+  kg.appendChild(t);
+});
+setTimeout(function(){document.querySelectorAll('.num2').forEach(function(el,i){animateNumber(el,parseInt(el.dataset.target),800+i*200);});},500);
+
+// Log
+var ll=document.getElementById('log-list');
+CHANGELOG.forEach(function(c){
+  var col=TYPE_COLORS[c.type];var e=document.createElement('div');e.className='log-entry';e.style.borderLeftColor=col;
+  e.innerHTML='<div class="log-time">'+c.time+'</div><div><span class="log-tag" style="background:'+col+'20;color:'+col+'">'+c.type+'</span><span class="log-msg">'+c.msg+'</span></div>';
+  ll.appendChild(e);
 });
 
-setTimeout(() => {
-  document.querySelectorAll('.num2').forEach((el, i) => {
-    animateNumber(el, parseInt(el.dataset.target), 800 + i * 200);
-  });
-}, 600);
-
-// ── Build Changelog ──
-const logGrid = document.getElementById('log-grid');
-CHANGELOG.forEach(c => {
-  const col = TYPE_COLORS[c.type];
-  const entry = document.createElement('div');
-  entry.className = 'log-entry';
-  entry.style.borderLeftColor = col;
-  entry.innerHTML = `
-    <div class="log-time">${c.time}</div>
-    <div>
-      <span class="log-tag" style="background:${col}20;color:${col}">${c.type}</span>
-      <span class="log-msg">${c.msg}</span>
-    </div>
-  `;
-  logGrid.appendChild(entry);
-});
-
-// ── Live Clock ──
-function updateClock() {
-  const now = new Date();
-  const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  const date = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-  document.getElementById('clock').innerHTML = `${time}<div class="clock-date">${date}</div>`;
+// Clock
+function updateClock(){
+  var now=new Date();
+  var time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  var date=now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+  document.getElementById('clock').innerHTML=time+'<div class="clock-date">'+date+'</div>';
 }
-updateClock();
-setInterval(updateClock, 1000);
+updateClock();setInterval(updateClock,1000);
 </script>
-
 </body>
 </html>
