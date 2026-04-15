@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Epic Performance HQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d14;
+    --card: #15151f;
+    --card-border: #2a2a3a;
+    --subtle: #1a1a2a;
+    --text: #e0e0e0;
+    --muted: #888;
+    --dim: #555;
+    --faint: #444;
+    --ghost: #333;
+    --orange: #FF6B35;
+    --green: #00E5A0;
+    --pink: #FF3CAC;
+    --gold: #FFC300;
+    --purple: #8B5CF6;
+    --font-display: 'Orbitron', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: var(--bg);
+    font-family: var(--font-mono);
+    color: var(--text);
+  }
+  .dashboard {
+    width: 1920px;
+    height: 1080px;
+    padding: 18px 26px 14px;
+    display: flex;
+    flex-direction: column;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 16px; flex-shrink: 0; }
+  .header-sub { font-size: 10px; letter-spacing: 6px; color: var(--orange); text-transform: uppercase; margin-bottom: 5px; }
+  .header h1 { font-family: var(--font-display); font-size: 30px; font-weight: 900; letter-spacing: 3px; color: var(--orange); }
+  .header-status { font-size: 11px; color: var(--dim); margin-top: 5px; }
+  .header-status .dot { display:inline-block; color:var(--green); margin-right:6px; animation:pulse 2s infinite; }
+
+  /* Grids */
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:12px; flex-shrink:0; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; flex:1; min-height:0; }
+  .grid-2x3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; }
+
+  /* Metrics */
+  .metric-card .accent-blob { position:absolute; top:-25px; right:-25px; width:70px; height:70px; border-radius:50%; opacity:0.07; }
+  .metric-value { font-size:28px; font-weight:700; font-family:var(--font-display); line-height:1; }
+  .metric-unit { font-size:13px; margin-left:2px; }
+  .metric-delta { display:inline-block; font-size:10px; margin-top:5px; padding:2px 8px; border-radius:16px; }
+
+  /* Vibe */
+  .vibe-center { text-align:center; }
+  .vibe-label { font-size:20px; font-weight:900; letter-spacing:2px; margin-top:-4px; }
+  .vibe-sublabel { font-size:9px; color:var(--muted); margin-top:2px; }
+  .vibe-times { display:flex; justify-content:center; gap:4px; margin-top:8px; flex-wrap:wrap; }
+  .vibe-time { font-size:9px; padding:2px 5px; border-radius:4px; background:var(--subtle); color:var(--dim); border:1px solid transparent; transition:all 0.3s; }
+  .vibe-time.active { background:rgba(255,107,53,0.12); color:var(--orange); border-color:rgba(255,107,53,0.25); }
+
+  /* Chart */
+  .chart-row { display:flex; justify-content:space-between; align-items:flex-end; }
+  .chart-day { text-align:center; flex:1; }
+  .chart-bars { display:flex; flex-direction:column; align-items:center; gap:1px; height:65px; justify-content:flex-end; }
+  .chart-bar { width:13px; border-radius:3px 3px 0 0; }
+  .chart-day-label { font-size:9px; color:var(--dim); margin-top:4px; }
+  .chart-coffee { font-size:8px; color:var(--gold); }
+  .chart-legend { display:flex; gap:14px; margin-top:8px; justify-content:center; }
+  .chart-legend-item { display:flex; align-items:center; gap:4px; font-size:9px; color:var(--muted); }
+  .chart-legend-dot { width:7px; height:7px; border-radius:2px; }
+
+  /* OEE */
+  .oee-shift { padding:9px 11px; background:var(--subtle); border-radius:8px; border:1px solid var(--card-border); margin-bottom:7px; }
+  .oee-shift:last-child { margin-bottom:0; }
+  .oee-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+  .oee-shift-name { font-size:11px; font-weight:600; }
+  .oee-score { font-size:15px; font-weight:900; font-family:var(--font-display); }
+  .oee-bar-row { display:flex; align-items:center; gap:6px; margin-bottom:2px; }
+  .oee-bar-label { font-size:8px; color:#666; width:28px; }
+  .oee-bar-track { flex:1; height:5px; background:var(--card-border); border-radius:3px; overflow:hidden; }
+  .oee-bar-fill { height:100%; border-radius:3px; }
+  .oee-bar-val { font-size:8px; color:var(--muted); width:26px; text-align:right; }
+  .oee-footnote { font-size:8px; color:var(--faint); text-align:center; margin-top:7px; }
+
+  /* Stats */
+  .stat-tile { display:flex; align-items:center; gap:8px; padding:7px 9px; background:var(--subtle); border-radius:8px; border:1px solid var(--card-border); }
+  .stat-icon { font-size:18px; animation:float 3s ease infinite; }
+  .stat-number { font-size:15px; font-weight:700; font-family:var(--font-display); }
+  .stat-label { font-size:8px; color:#666; line-height:1.3; }
+
+  /* Log */
+  .log-list { display:flex; flex-direction:column; gap:5px; }
+  .log-entry { display:flex; gap:10px; align-items:flex-start; padding:7px 10px; background:var(--subtle); border-radius:8px; border-left:3px solid; }
+  .log-time { font-size:9px; color:var(--dim); min-width:55px; padding-top:1px; }
+  .log-tag { font-size:8px; padding:1px 5px; border-radius:3px; margin-right:5px; text-transform:uppercase; font-weight:600; display:inline-block; }
+  .log-msg { font-size:10px; line-height:1.4; }
+
+  /* Footer */
+  .footer { text-align:center; font-size:9px; color:var(--ghost); border-top:1px solid var(--subtle); padding-top:8px; margin-top:8px; flex-shrink:0; }
+
+  /* Clock */
+  .clock { position:absolute; top:12px; right:22px; font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--orange); letter-spacing:2px; opacity:0.8; }
+  .clock-date { font-size:9px; color:var(--dim); text-align:right; letter-spacing:1px; margin-top:1px; font-family:var(--font-mono); font-weight:400; }
+</style>
+</head>
+<body>
+
+<div class="clock" id="clock"></div>
+
+<div class="dashboard">
+
+  <div class="header">
+    <div class="header-sub">Plant Operations Command Center</div>
+    <h1>EPIC PERFORMANCE HQ</h1>
+    <div class="header-status"><span class="dot">●</span>Lines running · Air compressor: probably on · Breakroom donuts: critical low</div>
+  </div>
+
+  <div class="grid-4" id="metrics-grid"></div>
+
+  <div class="grid-3">
+
+    <!-- Col 1: Vibe + OEE -->
+    <div style="display:flex;flex-direction:column;gap:12px;min-height:0">
+      <div class="card" style="flex:0 0 auto">
+        <div class="card-label">Real-Time Plant Floor Vibe Check</div>
+        <div class="vibe-center">
+          <svg viewBox="0 0 200 120" width="175" height="105">
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#2a2a3a" stroke-width="14" stroke-linecap="round"/>
+            <path id="vibe-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#00E5A0" stroke-width="14" stroke-linecap="round" stroke-dasharray="0 251.2"/>
+            <line id="vibe-needle" x1="100" y1="100" x2="100" y2="45" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="100" cy="100" r="5" fill="#fff"/>
+          </svg>
+          <div id="vibe-label" class="vibe-label" style="color:var(--green)">DIALED IN</div>
+          <div class="vibe-sublabel">Plant Floor Vibe Status</div>
+        </div>
+        <div class="vibe-times" id="vibe-times"></div>
+      </div>
+      <div class="card" style="flex:1;min-height:0">
+        <div class="card-label">OEE by Shift (Overall Equipment Epicness)</div>
+        <div id="oee-container"></div>
+        <div class="oee-footnote">* 3rd shift numbers are "aspirational"</div>
+      </div>
+    </div>
+
+    <!-- Col 2: Weekly + KPIs -->
+    <div style="display:flex;flex-direction:column;gap:12px;min-height:0">
+      <div class="card" style="flex:0 0 auto">
+        <div class="card-label">Weekly Chaos Report</div>
+        <div class="chart-row" id="chart-row"></div>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--green)"></div>Uptime (hrs)</div>
+          <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--pink)"></div>Incidents</div>
+          <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--gold)"></div>Coffee</div>
+        </div>
+      </div>
+      <div class="card" style="flex:1;min-height:0">
+        <div class="card-label">Critical KPIs (Key Pastry Indicators)</div>
+        <div class="grid-2x3" id="kpi-grid"></div>
+      </div>
+    </div>
+
+    <!-- Col 3: Log -->
+    <div class="card" style="display:flex;flex-direction:column;min-height:0">
+      <div class="card-label">Maintenance Log (Unfiltered)</div>
+      <div class="log-list" id="log-list" style="flex:1;min-height:0;overflow:hidden"></div>
+    </div>
+
+  </div>
+
+  <div class="footer">EPIC PERFORMANCE HQ v4.20 · Powered by WD-40 and stubbornness · © 2026 Department of Making Things Go</div>
+</div>
+
+<script>
+var METRICS = [
+  { label: "Plant Awesomeness", value: 97.3, unit: "%", delta: "+2.1% since last audit", color: "#FF6B35" },
+  { label: "Cool Problems Solved", value: 842, unit: "", delta: "+18 this week", color: "#00E5A0" },
+  { label: "Weird Breakdowns Fixed", value: 613, unit: "", delta: "with zip ties & prayer", color: "#FF3CAC" },
+  { label: "WD-40 : Duct Tape Ratio", value: 1.69, unit: "cans/rolls", delta: "perfectly balanced", color: "#FFC300" },
+];
+var SECONDARY = [
+  { label: "Safety Meetings Survived", value: 487, icon: "🦺" },
+  { label: "'It's Always Done That' Was Wrong", value: 312, icon: "🤡" },
+  { label: "Mystery Noises Investigated", value: 1041, icon: "👂" },
+  { label: "Forklift Near-Misses", value: 74, icon: "😱" },
+  { label: "'Temporary' Fixes Still Running", value: 156, icon: "🩹" },
+  { label: "Breakroom Donuts Consumed", value: 3847, icon: "🍩" },
+];
+var ACTIVITY = [
+  { day:"Mon", uptime:22, incidents:3, coffee:7 },
+  { day:"Tue", uptime:24, incidents:1, coffee:5 },
+  { day:"Wed", uptime:18, incidents:6, coffee:9 },
+  { day:"Thu", uptime:23, incidents:2, coffee:4 },
+  { day:"Fri", uptime:24, incidents:0, coffee:3 },
+  { day:"Sat", uptime:20, incidents:4, coffee:8 },
+  { day:"Sun", uptime:12, incidents:0, coffee:2 },
+];
+var VIBES = [
+  {time:"6 AM",vibe:25},{time:"7 AM",vibe:50},{time:"8 AM",vibe:75},
+  {time:"9 AM",vibe:85},{time:"10 AM",vibe:90},{time:"11 AM",vibe:60},
+  {time:"12 PM",vibe:35},{time:"1 PM",vibe:70},{time:"2 PM",vibe:80},{time:"3 PM",vibe:55},
+];
+var OEE_DATA = [
+  {shift:"1st",availability:91,performance:88,quality:97},
+  {shift:"2nd",availability:85,performance:82,quality:95},
+  {shift:"3rd",availability:78,performance:74,quality:93},
+];
+var CHANGELOG = [
+  {time:"12m ago",msg:"Line 3 went down. Fixed it by turning it off and on again. Classic.",type:"fix"},
+  {time:"45m ago",msg:"Found the source of the rattle. It was Dave's lunch box on the conveyor.",type:"mystery"},
+  {time:"1h ago",msg:"Operator says machine 'sounds funny.' It's making that noise since 2019.",type:"ignore"},
+  {time:"2h ago",msg:"Corporate wants another root cause analysis. Root cause: it's old.",type:"paperwork"},
+  {time:"3h ago",msg:"Replaced bearing. Dropped bolt inside housing. 40 min with a magnet.",type:"fix"},
+  {time:"Yesterday",msg:"Night shift left the compressor running all weekend. Again.",type:"oops"},
+];
+var TYPE_COLORS = {fix:"#00E5A0",mystery:"#8B5CF6",ignore:"#FFC300",paperwork:"#FF6B35",oops:"#FF3CAC"};
+
+function animateNumber(el,target,duration){
+  duration=duration||1200;var isFloat=target%1!==0;var cur=0;var step=target/(duration/16);
+  var id=setInterval(function(){cur+=step;if(cur>=target){el.textContent=isFloat?target.toFixed(2):target;clearInterval(id);}
+  else{el.textContent=isFloat?cur.toFixed(2):Math.floor(cur);}},16);
+}
+
+// Metrics
+var mg=document.getElementById('metrics-grid');
+METRICS.forEach(function(m){
+  var d=document.createElement('div');d.className='card metric-card';
+  d.innerHTML='<div class="accent-blob" style="background:'+m.color+'"></div><div class="card-label">'+m.label+'</div><div class="metric-value" style="color:'+m.color+'"><span class="num" data-target="'+m.value+'">0</span>'+(m.unit?'<span class="metric-unit">'+m.unit+'</span>':'')+'</div><div class="metric-delta" style="background:'+m.color+'15;color:'+m.color+'">'+m.delta+'</div>';
+  mg.appendChild(d);
+});
+setTimeout(function(){document.querySelectorAll('.num').forEach(function(el){animateNumber(el,parseFloat(el.dataset.target));});},300);
+
+// Vibe
+var vibeIdx=4,vibeArc=document.getElementById('vibe-arc'),vibeNeedle=document.getElementById('vibe-needle'),vibeLabel=document.getElementById('vibe-label'),vibeTimes=document.getElementById('vibe-times');
+VIBES.forEach(function(v){var s=document.createElement('span');s.className='vibe-time';s.textContent=v.time;vibeTimes.appendChild(s);});
+function updateVibe(){
+  var v=VIBES[vibeIdx].vibe,angle=(v/100)*180-90,rad=angle*Math.PI/180;
+  var color=v>80?'#00E5A0':v>60?'#FFC300':v>40?'#FF6B35':'#FF3CAC';
+  var label=v>80?'DIALED IN':v>60?'Humming Along':v>40?'Meh':'Send Maintenance';
+  vibeArc.setAttribute('stroke',color);vibeArc.setAttribute('stroke-dasharray',(v/100)*251.2+' 251.2');
+  vibeNeedle.setAttribute('x2',100+55*Math.cos(rad));vibeNeedle.setAttribute('y2',100-55*Math.sin(rad));
+  vibeLabel.textContent=label;vibeLabel.style.color=color;
+  document.querySelectorAll('.vibe-time').forEach(function(el,i){i===vibeIdx?el.classList.add('active'):el.classList.remove('active');});
+}
+updateVibe();setInterval(function(){vibeIdx=(vibeIdx+1)%VIBES.length;updateVibe();},3000);
+
+// Chart
+var cr=document.getElementById('chart-row');
+ACTIVITY.forEach(function(d){
+  var c=document.createElement('div');c.className='chart-day';
+  c.innerHTML='<div class="chart-bars"><div class="chart-bar" style="background:var(--green);height:'+(d.uptime/24)*100+'%;opacity:0.8"></div><div class="chart-bar" style="background:var(--pink);height:'+(d.incidents/7)*50+'%;opacity:0.8;margin-top:-2px"></div></div><div class="chart-day-label">'+d.day+'</div><div class="chart-coffee">☕'+d.coffee+'</div>';
+  cr.appendChild(c);
+});
+
+// OEE
+var oc=document.getElementById('oee-container');
+OEE_DATA.forEach(function(s){
+  var oee=Math.round((s.availability/100)*(s.performance/100)*(s.quality/100)*100);
+  var oeeColor=oee>80?'#00E5A0':oee>65?'#FFC300':'#FF3CAC';
+  var bars=[{l:'Avail',v:s.availability,c:'#00E5A0'},{l:'Perf',v:s.performance,c:'#FFC300'},{l:'Qual',v:s.quality,c:'#8B5CF6'}];
+  var bh=bars.map(function(b){return'<div class="oee-bar-row"><span class="oee-bar-label">'+b.l+'</span><div class="oee-bar-track"><div class="oee-bar-fill" style="width:'+b.v+'%;background:'+b.c+'"></div></div><span class="oee-bar-val">'+b.v+'%</span></div>';}).join('');
+  var d=document.createElement('div');d.className='oee-shift';
+  d.innerHTML='<div class="oee-header"><span class="oee-shift-name">'+s.shift+' Shift</span><span class="oee-score" style="color:'+oeeColor+'">'+oee+'%</span></div>'+bh;
+  oc.appendChild(d);
+});
+
+// KPIs
+var kg=document.getElementById('kpi-grid');
+SECONDARY.forEach(function(s,i){
+  var t=document.createElement('div');t.className='stat-tile';
+  t.innerHTML='<span class="stat-icon" style="animation-delay:'+i*0.4+'s">'+s.icon+'</span><div><div class="stat-number"><span class="num2" data-target="'+s.value+'">0</span></div><div class="stat-label">'+s.label+'</div></div>';
+  kg.appendChild(t);
+});
+setTimeout(function(){document.querySelectorAll('.num2').forEach(function(el,i){animateNumber(el,parseInt(el.dataset.target),800+i*200);});},500);
+
+// Log
+var ll=document.getElementById('log-list');
+CHANGELOG.forEach(function(c){
+  var col=TYPE_COLORS[c.type];var e=document.createElement('div');e.className='log-entry';e.style.borderLeftColor=col;
+  e.innerHTML='<div class="log-time">'+c.time+'</div><div><span class="log-tag" style="background:'+col+'20;color:'+col+'">'+c.type+'</span><span class="log-msg">'+c.msg+'</span></div>';
+  ll.appendChild(e);
+});
+
+// Clock
+function updateClock(){
+  var now=new Date();
+  var time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  var date=now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+  document.getElementById('clock').innerHTML=time+'<div class="clock-date">'+date+'</div>';
+}
+updateClock();setInterval(updateClock,1000);
+</script>
+</body>
+</html>
